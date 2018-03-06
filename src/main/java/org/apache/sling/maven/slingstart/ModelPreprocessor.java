@@ -16,20 +16,6 @@
  */
 package org.apache.sling.maven.slingstart;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.MavenExecutionException;
 import org.apache.maven.artifact.Artifact;
@@ -56,6 +42,20 @@ import org.apache.sling.provisioning.model.Traceable;
 import org.apache.sling.provisioning.model.io.ModelReader;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModelPreprocessor {
 
@@ -125,7 +125,15 @@ public class ModelPreprocessor {
                 if (defaultModelDirectory.exists()) {
                     env.logger.debug("Try to extract model from default provisioning directory " + defaultModelDirectory.getAbsolutePath());
                     info.localModel = readLocalModel(info.project, inlinedModel, defaultModelDirectory, pattern, env.logger);
-                } else {
+                }
+
+                File defaultConvertedModelDirectory = new File(info.project.getBuild().getDirectory() + "/" + FeatureModelConverter.BUILD_DIR);
+                if (defaultConvertedModelDirectory.exists()) {
+                    env.logger.debug("Try to extract model from generated provisioning model directory " + defaultConvertedModelDirectory.getAbsolutePath());
+                    info.localModel = readLocalModel(info.project, inlinedModel, defaultConvertedModelDirectory, pattern, env.logger);
+                }
+
+                if (info.localModel == null) {
                     File defaultModelDirectoryInTest = new File(info.project.getBasedir(), "src/test/provisioning");
                     env.logger.debug("Try to extract model from default test provisioning directory " + defaultModelDirectoryInTest.getAbsolutePath());
                     info.localModel = readLocalModel(info.project, inlinedModel, defaultModelDirectoryInTest, pattern, env.logger);
