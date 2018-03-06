@@ -58,14 +58,18 @@ public class FeatureModelConverter {
         if (featureFiles.size() == 0)
             return;
 
-        File targetFile = new File(project.getBuild().getDirectory(), BUILD_DIR + "/model.txt");
-        targetFile.getParentFile().mkdirs();
+        File targetDir = new File(project.getBuild().getDirectory(), BUILD_DIR);
+        targetDir.mkdirs();
 
         try {
             ArtifactManager am = getArtifactManager(project, session);
-            System.out.println("$$$ Converting: " + featureFiles);
-            FeatureToProvisioning.convert(featureFiles, targetFile.getAbsolutePath(), false, am);
-            System.out.println("~~~ Converted at: " + targetFile);
+            for (File f : files) {
+                System.out.println("$$$ Converting: " + f);
+                String fn = targetDir.getAbsolutePath() + "/" + f.getName() + ".txt";
+                FeatureToProvisioning.convert(Collections.singletonList(f), fn, false, am);
+                System.out.println("~~~ Converted at: " + fn);
+
+            }
         } catch (Exception e) {
             throw new MavenExecutionException("Cannot convert feature files to provisioning model", e);
         }
