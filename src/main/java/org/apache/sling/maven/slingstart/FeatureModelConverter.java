@@ -66,7 +66,7 @@ public class FeatureModelConverter {
             for (File f : files) {
                 System.out.println("$$$ Converting: " + f);
                 String fn = targetDir.getAbsolutePath() + "/" + f.getName() + ".txt";
-                FeatureToProvisioning.convert(Collections.singletonList(f), fn, false, am);
+                FeatureToProvisioning.convert(f, fn, am);
                 System.out.println("~~~ Converted at: " + fn);
 
             }
