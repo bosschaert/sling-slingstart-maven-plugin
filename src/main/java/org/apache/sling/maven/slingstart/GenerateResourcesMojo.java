@@ -74,14 +74,16 @@ public class GenerateResourcesMojo extends AbstractSlingStartMojo {
             System.out.println("### Found: " + f);
         }
 
-        String targetDir = project.getBuild().getDirectory();
-        File provModelDir = new File(targetDir + "/" + FeatureModelConverter.BUILD_DIR);
-        provModelDir.mkdirs();
+        File targetDir = new File(project.getBuild().getDirectory(), FeatureModelConverter.BUILD_DIR);
+        targetDir.mkdirs();
 
         try {
             ArtifactManager am = getArtifactManager();
-            FeatureToProvisioning.convert(files, provModelDir.getAbsolutePath() + "/model.txt", false, am);
-            System.out.println("~~~ Converted files at: " + provModelDir);
+            for (File f : files) {
+                String fn = targetDir.getAbsolutePath() + "/" + f.getName() + ".txt";
+                FeatureToProvisioning.convert(f, fn, am);
+                System.out.println("### Converted: " + fn);
+            }
         } catch (Exception e) {
             throw new MojoExecutionException("Cannot convert feature files to provisioning model", e);
         }

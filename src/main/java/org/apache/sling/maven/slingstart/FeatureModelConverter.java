@@ -68,7 +68,6 @@ public class FeatureModelConverter {
                 String fn = targetDir.getAbsolutePath() + "/" + f.getName() + ".txt";
                 FeatureToProvisioning.convert(f, fn, am);
                 System.out.println("~~~ Converted at: " + fn);
-
             }
         } catch (Exception e) {
             throw new MavenExecutionException("Cannot convert feature files to provisioning model", e);
