@@ -69,7 +69,11 @@ public class GenerateResourcesMojo extends AbstractSlingStartMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         System.out.println("*** Checking: " + featuresDirectory);
-        List<File> files = Arrays.asList(featuresDirectory.listFiles());
+        File[] featureFiles = featuresDirectory.listFiles();
+        if (featureFiles == null)
+            return;
+
+        List<File> files = Arrays.asList(featureFiles);
         for (File f : files) {
             System.out.println("### Found: " + f);
         }
