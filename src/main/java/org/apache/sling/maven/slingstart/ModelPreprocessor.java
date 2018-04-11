@@ -48,6 +48,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -122,12 +123,19 @@ public class ModelPreprocessor {
             } else {
                 // use multiple fallbacks here only in case the default model directory is not explicitly set
                 File defaultModelDirectory = new File(info.project.getBasedir(), "src/main/provisioning");
-                if (defaultModelDirectory.exists()) {
+                File defaultConvertedModelDirectory = new File(info.project.getBuild().getDirectory() + "/" + FeatureModelConverter.BUILD_DIR);
+
+                if (defaultModelDirectory.exists() && defaultConvertedModelDirectory.exists()) {
+                    // The model is partially converted, partially explicitly defined. Copy the defined ones in with the converted ones
+                    for (File f : defaultModelDirectory.listFiles()) {
+                        System.out.println("*** Copying " + f + " to " + new File(defaultConvertedModelDirectory, f.getName()));
+                        Files.copy(f.toPath(), new File(defaultConvertedModelDirectory, f.getName()).toPath());
+                    }
+                } else {
                     env.logger.debug("Try to extract model from default provisioning directory " + defaultModelDirectory.getAbsolutePath());
                     info.localModel = readLocalModel(info.project, inlinedModel, defaultModelDirectory, pattern, env.logger);
                 }
 
-                File defaultConvertedModelDirectory = new File(info.project.getBuild().getDirectory() + "/" + FeatureModelConverter.BUILD_DIR);
                 if (defaultConvertedModelDirectory.exists()) {
                     env.logger.debug("Try to extract model from generated provisioning model directory " + defaultConvertedModelDirectory.getAbsolutePath());
                     info.localModel = readLocalModel(info.project, inlinedModel, defaultConvertedModelDirectory, pattern, env.logger);
