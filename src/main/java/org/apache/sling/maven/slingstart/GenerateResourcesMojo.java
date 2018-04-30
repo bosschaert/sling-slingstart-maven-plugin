@@ -16,6 +16,12 @@
  */
 package org.apache.sling.maven.slingstart;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.maven.artifact.handler.manager.ArtifactHandlerManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
@@ -27,16 +33,10 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.sling.feature.io.ArtifactManager;
+import org.apache.sling.feature.io.ArtifactManagerConfig;
 import org.apache.sling.feature.modelconverter.impl.FeatureToProvisioning;
-import org.apache.sling.feature.support.ArtifactManager;
-import org.apache.sling.feature.support.ArtifactManagerConfig;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Mojo(
         name = "generate-resources",

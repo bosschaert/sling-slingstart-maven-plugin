@@ -128,8 +128,13 @@ public class ModelPreprocessor {
                 if (defaultModelDirectory.exists() && defaultConvertedModelDirectory.exists()) {
                     // The model is partially converted, partially explicitly defined. Copy the defined ones in with the converted ones
                     for (File f : defaultModelDirectory.listFiles()) {
-                        System.out.println("*** Copying " + f + " to " + new File(defaultConvertedModelDirectory, f.getName()));
-                        Files.copy(f.toPath(), new File(defaultConvertedModelDirectory, f.getName()).toPath());
+                        File targetFile = new File(defaultConvertedModelDirectory, f.getName());
+                        if (targetFile.exists()) {
+                            env.logger.debug("File already exists. Skipping: " + targetFile);
+                        } else {
+                            env.logger.debug("Copying " + f + " to " + targetFile);
+                            Files.copy(f.toPath(), targetFile.toPath());
+                        }
                     }
                 } else {
                     env.logger.debug("Try to extract model from default provisioning directory " + defaultModelDirectory.getAbsolutePath());
